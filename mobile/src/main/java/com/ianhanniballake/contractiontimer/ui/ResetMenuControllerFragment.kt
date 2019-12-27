@@ -16,7 +16,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.provider.ContractionContract
@@ -90,7 +90,7 @@ class ResetMenuControllerFragment : Fragment(), LoaderManager.LoaderCallbacks<Cu
                 val resetDialogFragment = ResetDialogFragment()
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Showing Dialog")
-                FirebaseAnalytics.getInstance(context).logEvent("reset_open", null)
+//                FirebaseAnalytics.getInstance(context).logEvent("reset_open", null)
                 resetDialogFragment.show(fragmentManager, "reset")
                 true
             }

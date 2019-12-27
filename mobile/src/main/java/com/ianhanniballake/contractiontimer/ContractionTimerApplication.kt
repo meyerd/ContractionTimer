@@ -2,8 +2,8 @@ package com.ianhanniballake.contractiontimer
 
 import android.app.Application
 
-import com.google.firebase.FirebaseApp
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.FirebaseApp
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
 import com.ianhanniballake.contractiontimer.notification.NotificationUpdateReceiver
 import com.ianhanniballake.contractiontimer.strictmode.StrictModeController
@@ -18,13 +18,13 @@ class ContractionTimerApplication : Application() {
      * @see android.app.Application.onCreate
      */
     override fun onCreate() {
-        if (!FirebaseApp.getApps(this).isEmpty()) {
-            if (BuildConfig.DEBUG) {
-                StrictModeController.createInstance().setStrictMode()
-            }
-            FirebaseAnalytics.getInstance(this)
-                    .setUserProperty("debug", BuildConfig.DEBUG.toString())
-        }
+//        if (!FirebaseApp.getApps(this).isEmpty()) {
+//            if (BuildConfig.DEBUG) {
+//                StrictModeController.createInstance().setStrictMode()
+//            }
+//            FirebaseAnalytics.getInstance(this)
+//                    .setUserProperty("debug", BuildConfig.DEBUG.toString())
+//        }
         super.onCreate()
         AppWidgetUpdateHandler.createInstance().updateAllWidgets(this)
         NotificationUpdateReceiver.updateNotification(this)

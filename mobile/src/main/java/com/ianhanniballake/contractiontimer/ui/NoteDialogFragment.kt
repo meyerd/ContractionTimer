@@ -9,7 +9,7 @@ import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.widget.EditText
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -58,7 +58,7 @@ class NoteDialogFragment : DialogFragment() {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Received positive event")
                     val noteEvent = if (existingNote.isNullOrBlank()) "note_add_saved" else "note_edit_saved"
-                    FirebaseAnalytics.getInstance(getContext()).logEvent(noteEvent, null)
+//                    FirebaseAnalytics.getInstance(getContext()).logEvent(noteEvent, null)
                     val updateUri = ContentUris.withAppendedId(
                             ContractionContract.Contractions.CONTENT_ID_URI_BASE, contractionId)
                     val values = ContentValues().apply {

@@ -16,5 +16,10 @@
         android:menuCategory="secondary"
         android:title="@string/menu_settings"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/menu_visualize"
+        android:menuCategory="secondary"
+        android:title="@string/visualize"
+        app:showAsAction="never"/>
 
 </menu>

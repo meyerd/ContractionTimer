@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -61,7 +61,7 @@ class ExportActivity : FragmentActivity() {
                     false
                 }
                 if (success) {
-                    FirebaseAnalytics.getInstance(context).logEvent("export_complete", null)
+//                    FirebaseAnalytics.getInstance(context).logEvent("export_complete", null)
                     Toast.makeText(context, getString(R.string.backup_export_successful),
                             Toast.LENGTH_LONG).show()
                 } else {

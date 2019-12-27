@@ -24,7 +24,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
 import android.widget.TextView
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.data.CSVTransformer
@@ -125,22 +125,22 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val analytics = FirebaseAnalytics.getInstance(this)
+//        val analytics = FirebaseAnalytics.getInstance(this)
         when (item.itemId) {
             R.id.menu_share -> {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Menu selected Share")
-                val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "contraction")
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(adapter.cursor.count))
-                analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
+//                val bundle = Bundle()
+//                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "contraction")
+//                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, Integer.toString(adapter.cursor.count))
+//                analytics.logEvent(FirebaseAnalytics.Event.SHARE, bundle)
                 shareContractions()
                 return true
             }
             R.id.menu_add -> {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Menu selected Add")
-                analytics.logEvent("add_open", null)
+//                analytics.logEvent("add_open", null)
                 val addIntent = Intent(Intent.ACTION_INSERT, intent.data)
                         .setComponent(ComponentName(this, EditActivity::class.java))
                 startActivity(addIntent)
@@ -195,19 +195,19 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
 
     override fun onStart() {
         super.onStart()
-        val analytics = FirebaseAnalytics.getInstance(this)
+//        val analytics = FirebaseAnalytics.getInstance(this)
         val intent = intent
         if (intent.hasExtra(MainActivity.LAUNCHED_FROM_WIDGET_EXTRA)) {
             val widgetIdentifier = intent.getStringExtra(MainActivity.LAUNCHED_FROM_WIDGET_EXTRA)
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Launched from $widgetIdentifier")
-            analytics.logEvent("${widgetIdentifier}_launch", null)
+//            analytics.logEvent("${widgetIdentifier}_launch", null)
             intent.removeExtra(MainActivity.LAUNCHED_FROM_WIDGET_EXTRA)
         }
         if (intent.hasExtra(MainActivity.LAUNCHED_FROM_NOTIFICATION_EXTRA)) {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Launched from Notification")
-            analytics.logEvent("notification_launch", null)
+//            analytics.logEvent("notification_launch", null)
             intent.removeExtra(MainActivity.LAUNCHED_FROM_NOTIFICATION_EXTRA)
         }
         if (intent.hasExtra(MainActivity.LAUNCHED_FROM_NOTIFICATION_ACTION_NOTE_EXTRA)) {
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
                 putLong(NoteDialogFragment.CONTRACTION_ID_ARGUMENT, id)
                 putString(NoteDialogFragment.EXISTING_NOTE_ARGUMENT, existingNote)
             }
-            analytics.logEvent(if (existingNote.isNullOrBlank()) "note_add_launch" else "note_edit_launch", null)
+//            analytics.logEvent(if (existingNote.isNullOrBlank()) "note_add_launch" else "note_edit_launch", null)
             noteDialogFragment.show(supportFragmentManager, "note")
             intent.removeExtra(MainActivity.LAUNCHED_FROM_NOTIFICATION_ACTION_NOTE_EXTRA)
         }

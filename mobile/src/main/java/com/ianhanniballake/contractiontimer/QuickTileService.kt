@@ -14,7 +14,7 @@ import android.service.quicksettings.TileService
 import android.support.annotation.RequiresApi
 import android.text.format.DateUtils
 import android.util.Log
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
 import com.ianhanniballake.contractiontimer.notification.NotificationUpdateReceiver
 import com.ianhanniballake.contractiontimer.provider.ContractionContract
@@ -125,11 +125,11 @@ class QuickTileService : TileService() {
     }
 
     override fun onClick() {
-        val analytics = FirebaseAnalytics.getInstance(this)
+//        val analytics = FirebaseAnalytics.getInstance(this)
         if (!contractionOngoing) {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Starting contraction")
-            analytics.logEvent("quick_tile_start", null)
+//            analytics.logEvent("quick_tile_start", null)
             // Start a new contraction
             GlobalScope.launch {
                 contentResolver.insert(ContractionContract.Contractions.CONTENT_URI,
@@ -140,7 +140,7 @@ class QuickTileService : TileService() {
         } else {
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Stopping contraction")
-            analytics.logEvent("quick_tile_stop", null)
+//            analytics.logEvent("quick_tile_stop", null)
             val newEndTime = ContentValues()
             newEndTime.put(ContractionContract.Contractions.COLUMN_NAME_END_TIME, System.currentTimeMillis())
             val updateUri = ContentUris.withAppendedId(

@@ -13,7 +13,7 @@ import android.support.v4.app.RemoteInput
 import android.support.v4.app.TaskStackBuilder
 import android.util.Log
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -108,7 +108,7 @@ class NoteTranslucentActivity : Activity() {
                     else
                         "remote_input"
                     val noteEvent = if (note.isNullOrBlank()) "note_add" else "note_edit_$voiceInputSource"
-                    FirebaseAnalytics.getInstance(context).logEvent(noteEvent, null)
+//                    FirebaseAnalytics.getInstance(context).logEvent(noteEvent, null)
                     AppWidgetUpdateHandler.createInstance().updateAllWidgets(context)
                     NotificationUpdateReceiver.updateNotification(context)
                 } else {

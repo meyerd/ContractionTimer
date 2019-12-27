@@ -30,7 +30,7 @@ import android.widget.FrameLayout
 import android.widget.ListView
 import android.widget.TextView
 import android.widget.ViewAnimator
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -203,7 +203,7 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
             val appCompatActivity = activity as AppCompatActivity
             appCompatActivity.startSupportActionMode(object : ActionMode.Callback {
                 override fun onActionItemClicked(actionMode: ActionMode, menuItem: MenuItem): Boolean {
-                    val analytics = FirebaseAnalytics.getInstance(context)
+//                    val analytics = FirebaseAnalytics.getInstance(context)
                     val selectedIds = listView.checkedItemIds
                     if (selectedIds.isEmpty()) {
                         return false
@@ -213,7 +213,7 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                         R.id.menu_context_view -> {
                             if (BuildConfig.DEBUG)
                                 Log.d(TAG, "Context Action Mode selected view")
-                            analytics.logEvent("view_cab", null)
+//                            analytics.logEvent("view_cab", null)
                             viewContraction(contractionId)
                             return true
                         }
@@ -229,7 +229,7 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                                 else
                                     "Edit Note")
                             val noteEvent = if (existingNote.isNullOrBlank()) "note_add_cab" else "note_edit_cab"
-                            analytics.logEvent(noteEvent, null)
+//                            analytics.logEvent(noteEvent, null)
                             showNoteDialog(contractionId, existingNote)
                             actionMode.finish()
                             return true
@@ -238,8 +238,8 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                             if (BuildConfig.DEBUG)
                                 Log.d(TAG, "Context Action Mode selected delete")
                             val bundle = Bundle()
-                            bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(selectedIds.size))
-                            analytics.logEvent("delete_cab", bundle)
+//                            bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(selectedIds.size))
+//                            analytics.logEvent("delete_cab", bundle)
                             for (selectedId in selectedIds)
                                 deleteContraction(selectedId)
                             actionMode.finish()
@@ -514,12 +514,12 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
             val deleteItem = showPopupView.menu.findItem(R.id.menu_context_delete)
             deleteItem.title = resources.getQuantityText(R.plurals.menu_context_delete, 1)
             showPopupView.setOnMenuItemClickListener { item ->
-                val analytics = FirebaseAnalytics.getInstance(getContext())
+//                val analytics = FirebaseAnalytics.getInstance(getContext())
                 when (item.itemId) {
                     R.id.menu_context_view -> {
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "Popup Menu selected view")
-                        analytics.logEvent("view_popup", null)
+//                        analytics.logEvent("view_popup", null)
                         viewContraction(id)
                         true
                     }
@@ -528,7 +528,7 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "Popup Menu selected $type")
                         val noteEvent = if (note.isNullOrBlank()) "note_add_popup" else "note_edit_popup"
-                        analytics.logEvent(noteEvent, null)
+//                        analytics.logEvent(noteEvent, null)
                         showNoteDialog(id, note)
                         true
                     }
@@ -536,8 +536,8 @@ class ContractionListFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor
                         if (BuildConfig.DEBUG)
                             Log.d(TAG, "Popup Menu selected delete")
                         val bundle = Bundle()
-                        bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(1))
-                        analytics.logEvent("delete_popup", bundle)
+//                        bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(1))
+//                        analytics.logEvent("delete_popup", bundle)
                         deleteContraction(id)
                         true
                     }

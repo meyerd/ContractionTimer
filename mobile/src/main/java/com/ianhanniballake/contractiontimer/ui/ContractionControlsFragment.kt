@@ -16,7 +16,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -76,11 +76,11 @@ class ContractionControlsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cu
             // Disable the button to ensure we give the database a chance to
             // complete the insert/update
             view.isEnabled = false
-            val analytics = FirebaseAnalytics.getInstance(context)
+//            val analytics = FirebaseAnalytics.getInstance(context)
             if (!contractionOngoing) {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Starting contraction")
-                analytics.logEvent("control_start", null)
+//                analytics.logEvent("control_start", null)
                 // Start a new contraction
                 val context = context
                 GlobalScope.launch {
@@ -92,7 +92,7 @@ class ContractionControlsFragment : Fragment(), LoaderManager.LoaderCallbacks<Cu
             } else {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "Stopping contraction")
-                analytics.logEvent("control_stop", null)
+//                analytics.logEvent("control_stop", null)
                 val newEndTime = ContentValues()
                 newEndTime.put(ContractionContract.Contractions.COLUMN_NAME_END_TIME, System.currentTimeMillis())
                 val latestContractionId = adapter.getItemId(0)

@@ -13,7 +13,7 @@ import android.support.v7.preference.PreferenceFragmentCompat
 import android.support.v7.preference.PreferenceManager
 import android.util.Log
 import android.view.MenuItem
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -119,15 +119,15 @@ class Preferences : AppCompatActivity() {
         }
 
         override fun onPreferenceTreeClick(preference: Preference): Boolean {
-            when (preference.key) {
-                "export" -> FirebaseAnalytics.getInstance(context).logEvent("export_open", null)
-                "import" -> FirebaseAnalytics.getInstance(context).logEvent("import_open", null)
-            }
+//            when (preference.key) {
+//                "export" -> FirebaseAnalytics.getInstance(context).logEvent("export_open", null)
+//                "import" -> FirebaseAnalytics.getInstance(context).logEvent("import_open", null)
+//            }
             return super.onPreferenceTreeClick(preference)
         }
 
         override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String) {
-            val analytics = FirebaseAnalytics.getInstance(context)
+//            val analytics = FirebaseAnalytics.getInstance(context)
             val bundle = Bundle()
             when (key) {
                 Preferences.KEEP_SCREEN_ON_PREFERENCE_KEY -> {
@@ -136,8 +136,8 @@ class Preferences : AppCompatActivity() {
                             resources.getBoolean(R.bool.pref_keep_screen_on_default))
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Keep Screen On: $newIsKeepScreenOn")
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, newIsKeepScreenOn.toString())
-                    analytics.logEvent("preference_keep_screen_on", bundle)
+//                    bundle.putString(FirebaseAnalytics.Param.VALUE, newIsKeepScreenOn.toString())
+//                    analytics.logEvent("preference_keep_screen_on", bundle)
                 }
                 Preferences.LOCK_PORTRAIT_PREFERENCE_KEY -> {
                     val newIsLockPortrait = sharedPreferences.getBoolean(
@@ -145,8 +145,8 @@ class Preferences : AppCompatActivity() {
                             resources.getBoolean(R.bool.pref_lock_portrait_default))
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Lock Portrait: $newIsLockPortrait")
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, newIsLockPortrait.toString())
-                    analytics.logEvent("preference_lock_portrait", bundle)
+//                    bundle.putString(FirebaseAnalytics.Param.VALUE, newIsLockPortrait.toString())
+//                    analytics.logEvent("preference_lock_portrait", bundle)
                     activity.requestedOrientation = if (newIsLockPortrait)
                         ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
                     else
@@ -156,8 +156,8 @@ class Preferences : AppCompatActivity() {
                     val newAppwidgetBackground = appwidgetBackgroundListPreference.value
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Appwidget Background: $newAppwidgetBackground")
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, newAppwidgetBackground)
-                    analytics.logEvent("preference_widget_background", bundle)
+//                    bundle.putString(FirebaseAnalytics.Param.VALUE, newAppwidgetBackground)
+//                    analytics.logEvent("preference_widget_background", bundle)
                     appwidgetBackgroundListPreference.summary = appwidgetBackgroundListPreference.entry
                     AppWidgetUpdateHandler.createInstance().updateAllWidgets(context)
                 }
@@ -167,16 +167,16 @@ class Preferences : AppCompatActivity() {
                             resources.getBoolean(R.bool.pref_notification_enable_default))
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Notification Enabled: $newNotifcationEnabled")
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, newNotifcationEnabled.toString())
-                    analytics.logEvent("preference_notification_enabled", bundle)
+//                    bundle.putString(FirebaseAnalytics.Param.VALUE, newNotifcationEnabled.toString())
+//                    analytics.logEvent("preference_notification_enabled", bundle)
                     NotificationUpdateReceiver.updateNotification(context)
                 }
                 Preferences.AVERAGE_TIME_FRAME_PREFERENCE_KEY -> {
                     val newAverageTimeFrame = averageTimeFrameListPreference.value
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Average Time Frame: $newAverageTimeFrame")
-                    bundle.putString(FirebaseAnalytics.Param.VALUE, newAverageTimeFrame)
-                    analytics.logEvent("preference_average_time_frame", bundle)
+//                    bundle.putString(FirebaseAnalytics.Param.VALUE, newAverageTimeFrame)
+//                    analytics.logEvent("preference_average_time_frame", bundle)
                     val editor = sharedPreferences.edit()
                     editor.putBoolean(Preferences.AVERAGE_TIME_FRAME_CHANGED_MAIN_PREFERENCE_KEY, true)
                     editor.putBoolean(Preferences.AVERAGE_TIME_FRAME_CHANGED_FRAGMENT_PREFERENCE_KEY, true)
@@ -192,7 +192,7 @@ class Preferences : AppCompatActivity() {
 
         override fun onStart() {
             super.onStart()
-            FirebaseAnalytics.getInstance(context).logEvent("preferences_open", null)
+//            FirebaseAnalytics.getInstance(context).logEvent("preferences_open", null)
         }
     }
 }

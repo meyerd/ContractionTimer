@@ -109,4 +109,6 @@
     <string name="pref_open_source_licenses">Open source licenses</string>
     <string name="pref_about_contraction_timer">About Contraction Timer</string>
 
+    <string name="visualize">Visualize</string>
+
 </resources>

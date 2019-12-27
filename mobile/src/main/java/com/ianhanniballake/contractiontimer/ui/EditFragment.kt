@@ -28,7 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -353,7 +353,7 @@ class EditFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 if (Intent.ACTION_INSERT == activity.intent.action) {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Add selected save")
-                    FirebaseAnalytics.getInstance(context).logEvent("add_save", null)
+//                    FirebaseAnalytics.getInstance(context).logEvent("add_save", null)
                     val activity = activity
                     GlobalScope.launch {
                         context.contentResolver.insert(activity.intent.data!!, values)
@@ -364,7 +364,7 @@ class EditFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 } else {
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Edit selected save")
-                    FirebaseAnalytics.getInstance(context).logEvent("edit_save", null)
+//                    FirebaseAnalytics.getInstance(context).logEvent("edit_save", null)
                     GlobalScope.launch {
                         context.contentResolver.update(activity.intent.data!!, values, null, null)
                         AppWidgetUpdateHandler.createInstance().updateAllWidgets(activity)

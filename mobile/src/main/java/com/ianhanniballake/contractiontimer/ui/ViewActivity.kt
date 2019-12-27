@@ -22,8 +22,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import com.google.firebase.analytics.FirebaseAnalytics
-import com.google.firebase.crash.FirebaseCrash
+//import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.crash.FirebaseCrash
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.provider.ContractionContract
@@ -107,9 +107,9 @@ class ViewActivity : AppCompatActivity(),
         } catch (e: NumberFormatException) {
             if (BuildConfig.DEBUG)
                 Log.e(TAG, "NumberFormatException in onLoadFinished", e)
-            else {
-                FirebaseCrash.report(e)
-            }
+//            else {
+//                FirebaseCrash.report(e)
+//            }
             finish()
             return
         }
@@ -179,7 +179,7 @@ class ViewActivity : AppCompatActivity(),
             val widgetIdentifier = intent.getStringExtra(MainActivity.LAUNCHED_FROM_WIDGET_EXTRA)
             if (BuildConfig.DEBUG)
                 Log.d(TAG, "Launched from $widgetIdentifier")
-            FirebaseAnalytics.getInstance(this).logEvent("${widgetIdentifier}_view_launch", null)
+//            FirebaseAnalytics.getInstance(this).logEvent("${widgetIdentifier}_view_launch", null)
             intent.removeExtra(MainActivity.LAUNCHED_FROM_WIDGET_EXTRA)
         }
     }

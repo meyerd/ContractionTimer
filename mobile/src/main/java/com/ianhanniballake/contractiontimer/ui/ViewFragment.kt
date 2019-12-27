@@ -23,7 +23,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -173,7 +173,7 @@ class ViewFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val uri = ContentUris.withAppendedId(
                 ContractionContract.Contractions.CONTENT_ID_URI_BASE, contractionId)
-        val analytics = FirebaseAnalytics.getInstance(context)
+//        val analytics = FirebaseAnalytics.getInstance(context)
         when (item.itemId) {
             R.id.menu_edit -> {
                 // isContractionOngoing should be non-null at this point, but
@@ -185,7 +185,7 @@ class ViewFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 if (isContractionOngoing == true)
                     Toast.makeText(activity, R.string.edit_ongoing_error, Toast.LENGTH_SHORT).show()
                 else {
-                    analytics.logEvent("edit_open_view", null)
+//                    analytics.logEvent("edit_open_view", null)
                     startActivity(Intent(Intent.ACTION_EDIT, uri)
                             .setComponent(ComponentName(activity, EditActivity::class.java)))
                 }
@@ -195,8 +195,8 @@ class ViewFragment : Fragment(), LoaderManager.LoaderCallbacks<Cursor> {
                 if (BuildConfig.DEBUG)
                     Log.d(TAG, "View selected delete")
                 val bundle = Bundle()
-                bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(1))
-                analytics.logEvent("delete_view", bundle)
+//                bundle.putString(FirebaseAnalytics.Param.VALUE, Integer.toString(1))
+//                analytics.logEvent("delete_view", bundle)
                 val activity = activity
                 GlobalScope.launch {
                     context.contentResolver.delete(uri, null, null)

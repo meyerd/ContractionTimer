@@ -9,7 +9,7 @@ import android.os.RemoteException
 import android.support.v4.app.FragmentActivity
 import android.util.Log
 import android.widget.Toast
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -68,7 +68,7 @@ class ImportActivity : FragmentActivity() {
                     getString(R.string.backup_error_open_file)
                 }
                 if (error.isNullOrBlank()) {
-                    FirebaseAnalytics.getInstance(context).logEvent("import_complete", null)
+//                    FirebaseAnalytics.getInstance(context).logEvent("import_complete", null)
                     Toast.makeText(context, getString(R.string.backup_import_successful),
                             Toast.LENGTH_LONG).show()
                 } else {

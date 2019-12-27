@@ -6,7 +6,7 @@ import android.os.Bundle
 import android.support.v4.app.DialogFragment
 import android.support.v7.app.AlertDialog
 import android.util.Log
-import com.google.firebase.analytics.FirebaseAnalytics
+//import com.google.firebase.analytics.FirebaseAnalytics
 import com.ianhanniballake.contractiontimer.BuildConfig
 import com.ianhanniballake.contractiontimer.R
 import com.ianhanniballake.contractiontimer.appwidget.AppWidgetUpdateHandler
@@ -41,7 +41,7 @@ class ResetDialogFragment : DialogFragment() {
                 .setPositiveButton(R.string.reset_dialog_confirm) { _, _ ->
                     if (BuildConfig.DEBUG)
                         Log.d(TAG, "Received positive event")
-                    FirebaseAnalytics.getInstance(context).logEvent("reset_complete", null)
+//                    FirebaseAnalytics.getInstance(context).logEvent("reset_complete", null)
                     val context = context
                     GlobalScope.launch {
                         context.contentResolver.delete(ContractionContract.Contractions.CONTENT_URI,
