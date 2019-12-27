@@ -150,13 +150,6 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
                 startActivity(Intent(this, Preferences::class.java))
                 return true
             }
-            R.id.menu_donate -> {
-                if (BuildConfig.DEBUG)
-                    Log.d(TAG, "Menu selected Donate")
-                analytics.logEvent("donate_open", null)
-                DonateDialogFragment().show(supportFragmentManager, "donate")
-                return true
-            }
             else -> return super.onOptionsItemSelected(item)
         }
     }

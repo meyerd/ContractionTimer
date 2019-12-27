@@ -12,5 +12,8 @@
     <string name="graphics_and_testing_by_label">Graphics and Testing by:</string>
     <string name="artist_and_tester">Andrea Lake</string>
     <string name="artist_and_tester_link">http://kamiawolf.deviantart.com</string>
+    <string name="extensions_label">Some Extensions by:</string>
+    <string name="extensions">Dominik Meyer</string>
+    <string name="extensions_link">https://github.com/meyerd</string>
 
 </resources>

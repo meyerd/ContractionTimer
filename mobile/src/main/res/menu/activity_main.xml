@@ -16,10 +16,5 @@
         android:menuCategory="secondary"
         android:title="@string/menu_settings"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/menu_donate"
-        android:menuCategory="secondary"
-        android:title="@string/menu_donate"
-        app:showAsAction="never"/>
 
 </menu>
