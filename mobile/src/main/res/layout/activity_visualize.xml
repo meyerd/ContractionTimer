@@ -6,4 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".ui.VisualizeActivity">
 
+    <com.github.mikephil.charting.charts.ScatterChart
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/scatter_chart"/>
+
 </android.support.constraint.ConstraintLayout>

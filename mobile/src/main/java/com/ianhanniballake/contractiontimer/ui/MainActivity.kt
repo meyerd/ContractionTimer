@@ -150,6 +150,10 @@ class MainActivity : AppCompatActivity(), LoaderManager.LoaderCallbacks<Cursor> 
                 startActivity(Intent(this, Preferences::class.java))
                 return true
             }
+            R.id.menu_visualize -> {
+                startActivity(Intent(this, VisualizeActivity::class.java))
+                return true
+            }
             else -> return super.onOptionsItemSelected(item)
         }
     }
