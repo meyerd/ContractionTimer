@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -31,12 +32,19 @@ public class VisualizeActivity extends AppCompatActivity {
 
     private ScatterChart scatterChart;
 
+    private final String TAG = "VisualizeActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visualize);
 
         scatterChart = (ScatterChart)findViewById(R.id.scatter_chart);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
         new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
     }
@@ -93,6 +101,7 @@ public class VisualizeActivity extends AppCompatActivity {
                         final long endTime = cursor.getLong(endColumnIndex);
                         final long duration = max((endTime - startTime) / 1000 , 0);
                         Entry e = new Entry(startTime, duration);
+                        Log.d(TAG, "Entry: " + startTime + " " + duration);
                         entries.add(e);
                     }
                 }
@@ -125,7 +134,9 @@ public class VisualizeActivity extends AppCompatActivity {
                         double new_avg = avg + (v - avg) / (double)ctr;
                         Sn += (v - avg) * (v - new_avg);
                         averages.add(new Entry(e.getX(), (float)new_avg));
-                        std_deviations.add(new Entry(e.getX(), (float)Math.sqrt(Sn/ctr)));
+                        double new_dev = Math.sqrt(Sn/ctr);
+                        std_deviations.add(new Entry(e.getX(), (float)(new_avg - (new_dev / 2.0))));
+                        std_deviations.add(new Entry(e.getX(), (float)(new_avg + (new_dev / 2.0))));
                         avg = new_avg;
                         ctr += 1;
                     }
@@ -138,15 +149,15 @@ public class VisualizeActivity extends AppCompatActivity {
                 scatterDataSetEntries.setColor(ColorTemplate.rgb("#2ecc71"));
                 scatterDataSetAverages.setColor(ColorTemplate.rgb("#f1c40f"));
                 scatterDataSetStdDeviations.setColor(ColorTemplate.rgb("#e74c3c"));
-                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetAverages, scatterDataSetStdDeviations);
-//                ScatterData scatterData = new ScatterData(scatterDataSetEntries);
+//                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetAverages, scatterDataSetStdDeviations);
+                ScatterData scatterData = new ScatterData(scatterDataSetEntries);
 
                 DateValueFormatter formatter = new DateValueFormatter();
 
                 XAxis xAxis = scatterChart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setValueFormatter(formatter);
-                xAxis.setGranularity(10f);
+                xAxis.setGranularity(1f);
 
                 scatterChart.setData(scatterData);
 //            scatterChart.animateXY(500, 500);
