@@ -1,5 +1,6 @@
 package com.ianhanniballake.contractiontimer.ui;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -16,9 +17,12 @@ import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ianhanniballake.contractiontimer.R;
+import com.ianhanniballake.contractiontimer.curvefit.PolyTrendLine;
+import com.ianhanniballake.contractiontimer.curvefit.TrendLine;
 import com.ianhanniballake.contractiontimer.provider.ContractionContract;
 
 import java.lang.ref.WeakReference;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,13 +64,27 @@ public class VisualizeActivity extends AppCompatActivity {
     }
 
 
-    public class DateValueFormatter extends ValueFormatter {
-        private final SimpleDateFormat start_end_format = new SimpleDateFormat("H:m:s",
+    private static class DateValueFormatter extends ValueFormatter {
+        private static final SimpleDateFormat start_end_format = new SimpleDateFormat("H:m:s",
                 Locale.getDefault());
 
         @Override
-        public String getAxisLabel(float value, AxisBase axis) {
+        public  String getAxisLabel(float value, AxisBase axis) {
             return start_end_format.format(Converters.fromTimestamp((long)value));
+        }
+
+        public static String formatDateValue(float value) {
+            return start_end_format.format(Converters.fromTimestamp((long)value));
+        }
+    }
+
+    private class DBEntry {
+        public final long startTime;
+        public final long endTime;
+
+        DBEntry(long start, long end) {
+            this.startTime = start;
+            this.endTime = end;
         }
     }
 
@@ -95,22 +113,22 @@ public class VisualizeActivity extends AppCompatActivity {
                 ArrayList<Entry> entries = new ArrayList<>();
                 final int startColumnIndex = cursor.getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_START_TIME);
                 final int endColumnIndex = cursor.getColumnIndex(ContractionContract.Contractions.COLUMN_NAME_END_TIME);
+
+
+
+                ArrayList<DBEntry> times = new ArrayList<>();
                 while (cursor.moveToNext()) {
                     if(!cursor.isNull(endColumnIndex) && !cursor.isNull(startColumnIndex)) {
-                        final long startTime = cursor.getLong(startColumnIndex);
-                        final long endTime = cursor.getLong(endColumnIndex);
-                        final long duration = max((endTime - startTime) / 1000 , 0);
-                        Entry e = new Entry(startTime, duration);
-                        Log.d(TAG, "Entry: " + startTime + " " + duration);
-                        entries.add(e);
+                        times.add(new DBEntry(cursor.getLong(startColumnIndex),
+                                cursor.getLong(endColumnIndex)));
                     }
                 }
 
-                Comparator<Entry> sortByStartTime = new Comparator<Entry>() {
+                Comparator<DBEntry> sortByDBStart = new Comparator<DBEntry>() {
                     @Override
-                    public int compare(Entry entry, Entry other) {
-                        final float ex = entry.getX();
-                        final float ox = other.getX();
+                    public int compare(DBEntry entry, DBEntry other) {
+                        final long ex = entry.startTime;
+                        final long ox = other.startTime;
                         if (ex > ox) {
                             return 1;
                         } else if (ex == ox) {
@@ -119,7 +137,40 @@ public class VisualizeActivity extends AppCompatActivity {
                         return -1;
                     }
                 };
-                Collections.sort(entries, sortByStartTime);
+
+                Collections.sort(times, sortByDBStart);
+
+                long firstentry = -101;
+                for(DBEntry e : times) {
+                    long startTime = e.startTime;
+                    if (firstentry < -100) {
+                        firstentry = startTime;
+                        Log.i(TAG, "set firstentry to: " + firstentry);
+                    }
+                    long originalStart = startTime;
+                    startTime = startTime - firstentry;
+                    long endTime = e.endTime;
+                    endTime = endTime - firstentry;
+                    final long duration = max((endTime - startTime) / 1000, 0);
+                    Entry ent = new Entry(startTime / 1000, duration);
+                    Log.d(TAG, "Entry: (" + originalStart + ") " + ent.getX() + " " + ent.getY());
+                    entries.add(ent);
+                }
+
+//                Comparator<Entry> sortByStartTime = new Comparator<Entry>() {
+//                    @Override
+//                    public int compare(Entry entry, Entry other) {
+//                        final float ex = entry.getX();
+//                        final float ox = other.getX();
+//                        if (ex > ox) {
+//                            return 1;
+//                        } else if (ex == ox) {
+//                            return 0;
+//                        }
+//                        return -1;
+//                    }
+//                };
+//                Collections.sort(entries, sortByStartTime);
 
                 ArrayList<Entry> averages = new ArrayList<>();
                 ArrayList<Entry> std_deviations = new ArrayList<>();
@@ -133,30 +184,56 @@ public class VisualizeActivity extends AppCompatActivity {
                         float v = e.getY();
                         double new_avg = avg + (v - avg) / (double)ctr;
                         Sn += (v - avg) * (v - new_avg);
-                        averages.add(new Entry(e.getX(), (float)new_avg));
-                        double new_dev = Math.sqrt(Sn/ctr);
-                        std_deviations.add(new Entry(e.getX(), (float)(new_avg - (new_dev / 2.0))));
-                        std_deviations.add(new Entry(e.getX(), (float)(new_avg + (new_dev / 2.0))));
+                        float xval = e.getX();
+                        averages.add(new Entry(xval, (float)new_avg));
+                        double new_dev = Math.sqrt(Sn/(double)ctr);
+                        std_deviations.add(new Entry(xval, (float)new_dev));
+//                        std_deviations.add(new Entry(e.getX(), (float)(new_avg - (new_dev / 2.0))));
+//                        std_deviations.add(new Entry(e.getX(), (float)(new_avg + (new_dev / 2.0))));
                         avg = new_avg;
                         ctr += 1;
+                        Log.i(TAG, "Std. Dev: " + xval + " " + new_dev);
+                        Log.i(TAG, "Avg: " + xval + " " + new_avg);
                     }
                 }
+
+                ArrayList<Entry> predictions = new ArrayList<>();
+
+                double[] x = new double[std_deviations.size()];
+                double[] y = new double[std_deviations.size()];
+                for(int i = 0; i < std_deviations.size(); i++) {
+                    x[i] = std_deviations.get(i).getX();
+                    y[i] = std_deviations.get(i).getY();
+                }
+                TrendLine pred = new PolyTrendLine(1);
+                pred.setValues(x, y);
+
+                for(int i = 0; i < std_deviations.size(); i++) {
+                    float xval = std_deviations.get(i).getX();
+                    float yval = (float)pred.predict((double)xval);
+                    predictions.add(new Entry(xval, yval));
+
+                    Log.i(TAG, "Point: " + xval + " " + yval);
+                }
+
+
 
                 ScatterDataSet scatterDataSetEntries = new ScatterDataSet(entries, "Contractions");
                 ScatterDataSet scatterDataSetAverages= new ScatterDataSet(averages, "Average");
                 ScatterDataSet scatterDataSetStdDeviations = new ScatterDataSet(std_deviations, "Std. Deviations");
+                ScatterDataSet scatterDataSetPredictions = new ScatterDataSet(predictions, "Prediction");
 //            scatterDataSet.setColors(ColorTemplate.MATERIAL_COLORS);
                 scatterDataSetEntries.setColor(ColorTemplate.rgb("#2ecc71"));
                 scatterDataSetAverages.setColor(ColorTemplate.rgb("#f1c40f"));
                 scatterDataSetStdDeviations.setColor(ColorTemplate.rgb("#e74c3c"));
 //                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetAverages, scatterDataSetStdDeviations);
-                ScatterData scatterData = new ScatterData(scatterDataSetEntries);
+                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetStdDeviations, scatterDataSetPredictions);
 
                 DateValueFormatter formatter = new DateValueFormatter();
 
                 XAxis xAxis = scatterChart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-                xAxis.setValueFormatter(formatter);
+//                xAxis.setValueFormatter(formatter);
                 xAxis.setGranularity(1f);
 
                 scatterChart.setData(scatterData);
