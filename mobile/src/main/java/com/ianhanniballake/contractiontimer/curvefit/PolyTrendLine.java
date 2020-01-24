@@ -6,6 +6,7 @@ public class PolyTrendLine extends OLSTrendLine {
         if (degree < 0) throw new IllegalArgumentException("The degree of the polynomial must not be negative");
         this.degree = degree;
     }
+
     protected double[] xVector(double x) { // {1, x, x*x, x*x*x, ...}
         double[] poly = new double[degree+1];
         double xi=1;
@@ -15,6 +16,7 @@ public class PolyTrendLine extends OLSTrendLine {
         }
         return poly;
     }
+
     @Override
     protected boolean logY() {return false;}
 }

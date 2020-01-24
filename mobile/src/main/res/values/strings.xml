@@ -111,4 +111,15 @@
 
     <string name="visualize">Visualize</string>
 
+    <string name="toggleContractions">Co</string>
+    <string name="toggleAverages">Avg</string>
+    <string name="toggleStdDeviations">StdDev</string>
+    <string name="togglePredictions">Pred</string>
+    <string name="fitOnLast"># fit</string>
+    <string name="predictionExtra"># pred</string>
+
+    <string name="update">update</string>
+
+    <string name="notEnough">not enough points to fit</string>
+
 </resources>

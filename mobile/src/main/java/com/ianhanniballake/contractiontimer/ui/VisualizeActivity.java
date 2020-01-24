@@ -2,11 +2,21 @@ package com.ianhanniballake.contractiontimer.ui;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.github.mikephil.charting.charts.ScatterChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -17,6 +27,7 @@ import com.github.mikephil.charting.data.ScatterDataSet;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 import com.ianhanniballake.contractiontimer.R;
+import com.ianhanniballake.contractiontimer.curvefit.LogTrendLine;
 import com.ianhanniballake.contractiontimer.curvefit.PolyTrendLine;
 import com.ianhanniballake.contractiontimer.curvefit.TrendLine;
 import com.ianhanniballake.contractiontimer.provider.ContractionContract;
@@ -34,7 +45,30 @@ import static java.lang.StrictMath.max;
 
 public class VisualizeActivity extends AppCompatActivity {
 
+    private static final String CONTRACTIONS_ENABLED_PREFERENCES = "vis_contractions_enabled";
+    private static final String AVERAGESS_ENABLED_PREFERENCES = "vis_averages_enabled";
+    private static final String STDDEVIATIONSS_ENABLED_PREFERENCES = "vis_stddeviations_enabled";
+    private static final String PREDICTIONS_ENABLED_PREFERENCES = "vis_predictionss_enabled";
+    private static final String FITONLAST_NUMBER_PREFERENCES = "vis_fit_on_last";
+    private static final String PREDICTIONEXTRA_NUMBER_PREFERENCES = "vis_prediction_extra";
+
     private ScatterChart scatterChart;
+
+    private ToggleButton toggleContractions;
+    private ToggleButton toggleAverages;
+    private ToggleButton toggleStdDeviations;
+    private ToggleButton togglePredictions;
+
+    private EditText fitOnLastEdit;
+    private EditText predictionExtraEdit;
+    private Button updatebutton;
+
+    private boolean contrationcsEnabled = true;
+    private boolean averagesEnabled = true;
+    private boolean stdDeviationsEnabled = true;
+    private boolean predictionsEnabled = true;
+    private int fitOnLast;
+    private int predictionExtra;
 
     private final String TAG = "VisualizeActivity";
 
@@ -44,6 +78,92 @@ public class VisualizeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_visualize);
 
         scatterChart = (ScatterChart)findViewById(R.id.scatter_chart);
+        toggleContractions = (ToggleButton)findViewById(R.id.toggleContraction);
+        toggleAverages = (ToggleButton)findViewById(R.id.toggleAverage);
+        toggleStdDeviations = (ToggleButton)findViewById(R.id.toggleStdDeviation);
+        togglePredictions = (ToggleButton)findViewById(R.id.togglePrediction);
+
+        fitOnLastEdit = (EditText)findViewById(R.id.fitOnLastEdit);
+        predictionExtraEdit = (EditText)findViewById(R.id.predictionsExtraEdit);
+        updatebutton = (Button)findViewById(R.id.buttonUpdate);
+
+        final SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        contrationcsEnabled = preferences.getBoolean(CONTRACTIONS_ENABLED_PREFERENCES, true);
+        averagesEnabled = preferences.getBoolean(AVERAGESS_ENABLED_PREFERENCES, true);
+        stdDeviationsEnabled = preferences.getBoolean(STDDEVIATIONSS_ENABLED_PREFERENCES, true);
+        predictionsEnabled = preferences.getBoolean(PREDICTIONS_ENABLED_PREFERENCES, true);
+
+        fitOnLast = preferences.getInt(FITONLAST_NUMBER_PREFERENCES, 20);
+        predictionExtra = preferences.getInt(PREDICTIONEXTRA_NUMBER_PREFERENCES, 10);
+
+        fitOnLastEdit.setText(Integer.toString(fitOnLast));
+        predictionExtraEdit.setText(Integer.toString(predictionExtra));
+
+        toggleContractions.setChecked(contrationcsEnabled);
+        toggleAverages.setChecked(averagesEnabled);
+        toggleStdDeviations.setChecked(stdDeviationsEnabled);
+        togglePredictions.setChecked(predictionsEnabled);
+
+        updatebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int newFitOnLast = fitOnLast;
+                int newPredictionExtra = predictionExtra;
+                try {
+                    newFitOnLast = Integer.parseInt(fitOnLastEdit.getText().toString());
+                    newPredictionExtra = Integer.parseInt(predictionExtraEdit.getText().toString());
+                } catch (Exception e) {
+                    return;
+                }
+                fitOnLast = newFitOnLast;
+                predictionExtra = newPredictionExtra;
+                SharedPreferences.Editor ed = preferences.edit();
+                ed.putInt(FITONLAST_NUMBER_PREFERENCES, fitOnLast);
+                ed.putInt(PREDICTIONEXTRA_NUMBER_PREFERENCES, predictionExtra);
+                ed.apply();
+                new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
+            }
+        });
+
+        toggleContractions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor ed = preferences.edit();
+                ed.putBoolean(CONTRACTIONS_ENABLED_PREFERENCES, isChecked);
+                ed.apply();
+                contrationcsEnabled = isChecked;
+                new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
+            }
+        });
+
+        toggleAverages.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor ed = preferences.edit();
+                ed.putBoolean(AVERAGESS_ENABLED_PREFERENCES, isChecked);
+                ed.apply();
+                averagesEnabled = isChecked;
+                new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
+            }
+        });
+
+        toggleStdDeviations.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor ed = preferences.edit();
+                ed.putBoolean(STDDEVIATIONSS_ENABLED_PREFERENCES, isChecked);
+                ed.apply();
+                stdDeviationsEnabled = isChecked;
+                new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
+            }
+        });
+
+        togglePredictions.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                SharedPreferences.Editor ed = preferences.edit();
+                ed.putBoolean(PREDICTIONS_ENABLED_PREFERENCES, isChecked);
+                ed.apply();
+                predictionsEnabled = isChecked;
+                new SetupScatterCharAsyncTask(getApplicationContext(), scatterChart).execute();
+            }
+        });
     }
 
     @Override
@@ -199,23 +319,54 @@ public class VisualizeActivity extends AppCompatActivity {
 
                 ArrayList<Entry> predictions = new ArrayList<>();
 
-                double[] x = new double[std_deviations.size()];
-                double[] y = new double[std_deviations.size()];
+                int total_devs = std_deviations.size();
+
+                double[] x = new double[Math.min(fitOnLast, total_devs)];
+                double[] y = new double[Math.min(fitOnLast, total_devs)];
+
+                int dataPoints = 0;
                 for(int i = 0; i < std_deviations.size(); i++) {
-                    x[i] = std_deviations.get(i).getX();
-                    y[i] = std_deviations.get(i).getY();
+                    if (i >= total_devs - Math.min(fitOnLast, total_devs)) {
+                        x[dataPoints] = std_deviations.get(i).getX();
+                        y[dataPoints] = std_deviations.get(i).getY();
+                        dataPoints++;
+                    }
                 }
+
+                Log.i(TAG, "# points for fit: " + (dataPoints + 1));
                 TrendLine pred = new PolyTrendLine(1);
-                pred.setValues(x, y);
+//                TrendLine pred = new LogTrendLine();
 
-                for(int i = 0; i < std_deviations.size(); i++) {
-                    float xval = std_deviations.get(i).getX();
-                    float yval = (float)pred.predict((double)xval);
-                    predictions.add(new Entry(xval, yval));
+                if(dataPoints > 4) {
+                    pred.setValues(x, y);
 
-                    Log.i(TAG, "Point: " + xval + " " + yval);
+
+                    int lastx = 0;
+                    for (int i = 0; i < std_deviations.size(); i++) {
+                        float xval = std_deviations.get(i).getX();
+                        float yval = (float) pred.predict((double) xval);
+                        predictions.add(new Entry(xval, yval));
+
+                        lastx = i;
+                        Log.i(TAG, "Point: " + xval + " " + yval);
+                    }
+                    float xlast_std_dev = std_deviations.get(std_deviations.size() - 1).getX();
+                    final float interval = 60;
+                    for (int i = 0; i < predictionExtra; i++) {
+                        float xval = xlast_std_dev + i * interval;
+                        float yval = (float) pred.predict((double)xval);
+                        predictions.add(new Entry(xval, yval));
+
+                        Log.i(TAG, "Extra Point: " + xval + " " + yval);
+                    }
+                } else {
+                    try {
+                        Toast.makeText(weakContext.get(), getResources().getString(R.string.notEnough), Toast.LENGTH_SHORT).show();
+                    } catch (Exception e) {
+
+                    }
+                    predictions.add(new Entry(averages.get(0).getX(), averages.get(0).getY()));
                 }
-
 
 
                 ScatterDataSet scatterDataSetEntries = new ScatterDataSet(entries, "Contractions");
@@ -226,8 +377,19 @@ public class VisualizeActivity extends AppCompatActivity {
                 scatterDataSetEntries.setColor(ColorTemplate.rgb("#2ecc71"));
                 scatterDataSetAverages.setColor(ColorTemplate.rgb("#f1c40f"));
                 scatterDataSetStdDeviations.setColor(ColorTemplate.rgb("#e74c3c"));
-//                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetAverages, scatterDataSetStdDeviations);
-                ScatterData scatterData = new ScatterData(scatterDataSetEntries, scatterDataSetStdDeviations, scatterDataSetPredictions);
+                ScatterData scatterData = new ScatterData();
+                if(contrationcsEnabled) {
+                    scatterData.addDataSet(scatterDataSetEntries);
+                }
+                if(averagesEnabled) {
+                    scatterData.addDataSet(scatterDataSetAverages);
+                }
+                if(stdDeviationsEnabled) {
+                    scatterData.addDataSet(scatterDataSetStdDeviations);
+                }
+                if(predictionsEnabled) {
+                    scatterData.addDataSet(scatterDataSetPredictions);
+                }
 
                 DateValueFormatter formatter = new DateValueFormatter();
 

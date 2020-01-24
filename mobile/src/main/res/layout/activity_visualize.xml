@@ -6,9 +6,93 @@
     android:layout_height="match_parent"
     tools:context=".ui.VisualizeActivity">
 
-    <com.github.mikephil.charting.charts.ScatterChart
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/scatter_chart"/>
+        android:orientation="vertical">
+
+        <com.github.mikephil.charting.charts.ScatterChart
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/scatter_chart"
+            android:layout_weight="90">
+        </com.github.mikephil.charting.charts.ScatterChart>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="10">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ToggleButton
+                    android:id="@+id/toggleContraction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/toggleContractions"
+                    android:textOn="@string/toggleContractions"
+                    android:textOff="@string/toggleContractions"/>
+                <ToggleButton
+                    android:id="@+id/toggleAverage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/toggleAverages"
+                    android:textOn="@string/toggleAverages"
+                    android:textOff="@string/toggleAverages"/>
+                <ToggleButton
+                    android:id="@+id/toggleStdDeviation"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/toggleStdDeviations"
+                    android:textOn="@string/toggleStdDeviations"
+                    android:textOff="@string/toggleStdDeviations"/>
+                <ToggleButton
+                    android:id="@+id/togglePrediction"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/togglePredictions"
+                    android:textOn="@string/togglePredictions"
+                    android:textOff="@string/togglePredictions"/>
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/fitOnLast"/>
+
+                <EditText
+                    android:id="@+id/fitOnLastEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/predictionExtra" />
+
+                <EditText
+                    android:id="@+id/predictionsExtraEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/buttonUpdate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/update" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </LinearLayout>
+
+
+
 
 </android.support.constraint.ConstraintLayout>

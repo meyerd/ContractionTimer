@@ -1,5 +1,7 @@
 package com.ianhanniballake.contractiontimer.curvefit;
 
+import android.util.Log;
+
 import org.apache.commons.math3.linear.MatrixUtils;
 import org.apache.commons.math3.linear.RealMatrix;
 import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
@@ -7,6 +9,8 @@ import org.apache.commons.math3.stat.regression.OLSMultipleLinearRegression;
 import java.util.Arrays;
 
 public abstract class OLSTrendLine implements TrendLine {
+
+    final static String TAG = "OLSTrendLine";
 
     RealMatrix coef = null; // will hold prediction coefs once we get values
 
@@ -33,6 +37,7 @@ public abstract class OLSTrendLine implements TrendLine {
         ols.setNoIntercept(true); // let the implementation include a constant in xVector if desired
         ols.newSampleData(y, xData); // provide the data to the model
         coef = MatrixUtils.createColumnRealMatrix(ols.estimateRegressionParameters()); // get our coefs
+        Log.i(TAG, "fit coefs: " + coef.toString());
     }
 
     @Override
