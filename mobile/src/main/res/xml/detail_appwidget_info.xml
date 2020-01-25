@@ -7,7 +7,7 @@
                     android:minResizeWidth="290dp"
                     android:minWidth="290dp"
                     android:previewImage="@drawable/detail_appwidget_preview"
-                    android:resizeMode="vertical"
+                    android:resizeMode="vertical|horizontal"
                     android:updatePeriodMillis="0"
                     android:widgetCategory="keyguard|home_screen"
                     tools:ignore="UnusedAttribute">
