@@ -21,49 +21,56 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_weight="10">
+            android:layout_weight="0"
+            android:orientation="vertical">
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <ToggleButton
                     android:id="@+id/toggleContraction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/toggleContractions"
-                    android:textOn="@string/toggleContractions"
-                    android:textOff="@string/toggleContractions"/>
+                    android:textOff="@string/toggleContractions"
+                    android:textOn="@string/toggleContractions" />
+
                 <ToggleButton
                     android:id="@+id/toggleAverage"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/toggleAverages"
-                    android:textOn="@string/toggleAverages"
-                    android:textOff="@string/toggleAverages"/>
+                    android:textOff="@string/toggleAverages"
+                    android:textOn="@string/toggleAverages" />
+
                 <ToggleButton
                     android:id="@+id/toggleStdDeviation"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/toggleStdDeviations"
-                    android:textOn="@string/toggleStdDeviations"
-                    android:textOff="@string/toggleStdDeviations"/>
+                    android:textOff="@string/toggleStdDeviations"
+                    android:textOn="@string/toggleStdDeviations" />
+
                 <ToggleButton
                     android:id="@+id/togglePrediction"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/togglePredictions"
-                    android:textOn="@string/togglePredictions"
-                    android:textOff="@string/togglePredictions"/>
+                    android:textOff="@string/togglePredictions"
+                    android:textOn="@string/togglePredictions" />
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/fitOnLast"/>
+                    android:text="@string/fitOnLast" />
 
                 <EditText
                     android:id="@+id/fitOnLastEdit"
@@ -81,6 +88,80 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:inputType="number" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nAverage" />
+
+                <EditText
+                    android:id="@+id/nAverageEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/buttonAvgAll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/nStdDev" />
+
+                <EditText
+                    android:id="@+id/nStdDevEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/buttonAllStdDev"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Spinner
+                    android:id="@+id/spinner_fit_source"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <Spinner
+                    android:id="@+id/spinner_fit_algorithm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/restrictData" />
+
+                <EditText
+                    android:id="@+id/restrictEdit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:inputType="number" />
+
+                <Button
+                    android:id="@+id/buttonAllData"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/all" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
                 <Button
                     android:id="@+id/buttonUpdate"

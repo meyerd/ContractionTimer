@@ -115,8 +115,37 @@
     <string name="toggleAverages">Avg</string>
     <string name="toggleStdDeviations">StdDev</string>
     <string name="togglePredictions">Pred</string>
+
     <string name="fitOnLast"># fit</string>
     <string name="predictionExtra"># pred</string>
+
+    <string name="restrictData"># data</string>
+
+    <string name="nAverage"># avg</string>
+    <string name="nStdDev"># s.dev.</string>
+    <string name="all">all</string>
+
+    <string-array name="fit_sources_str">
+        <item>Co</item>
+        <item>Avg</item>
+        <item>S.Dev.</item>
+    </string-array>
+
+    <string-array name="fit_algorithm_str">
+        <item>poly(1)</item>
+        <item>poly(2)</item>
+        <item>poly(3)</item>
+        <item>poly(4)</item>
+        <item>poly(5)</item>
+        <item>poly(6)</item>
+        <item>poly(7)</item>
+        <item>poly(8)</item>
+        <item>poly(9)</item>
+        <item>poly(10)</item>
+        <item>Exp</item>
+        <item>Log</item>
+        <item>Power</item>
+    </string-array>
 
     <string name="update">update</string>
 

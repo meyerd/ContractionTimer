@@ -33,7 +33,22 @@ public abstract class OLSTrendLine implements TrendLine {
                 y[i] = Math.log(y[i]);
             }
         }
+        Log.i(TAG, "fit X: ");
+        for(int p = 0; p < x.length; p++) {
+            StringBuilder sb = new StringBuilder();
+            for(int p1 = 0; p1 < xData[p].length; p1++) {
+                sb.append(xData[p][p1] + "\t");
+            }
+            Log.i(TAG, " " + sb.toString());
+        }
+        Log.i(TAG, "fit y: " );
+        StringBuilder sb = new StringBuilder();
+        for(int p = 0; p < y.length; p++) {
+            sb.append(y[p] + "\t");
+        }
+        Log.i(TAG, " " + sb.toString());
         OLSMultipleLinearRegression ols = new OLSMultipleLinearRegression();
+        ols.newSampleData(y, xData);
         ols.setNoIntercept(true); // let the implementation include a constant in xVector if desired
         ols.newSampleData(y, xData); // provide the data to the model
         coef = MatrixUtils.createColumnRealMatrix(ols.estimateRegressionParameters()); // get our coefs
